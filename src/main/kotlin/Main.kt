@@ -1,41 +1,77 @@
 package com.danylo.oliinyk
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+enum class AllowedKey {
+    W, A, S, D, Q, SPACE,
+    UNKNOWN
+}
+
 fun main() {
     val width = 10
     val height = 10
+    val map = MutableList(height) { MutableList(width) { "[ ]" } }
+//    println(map)
 
-    val map = Array(height) { Array(width) { "[ ]" } }
     var posX = 0
     var posY = 0
-    map[posY][posX] = "[x]"
+
+    map[posY][posX] = "[x]" // map.get(posX).set(posY, "x")
     printMap(map)
 
     var isAppRun = true
-    while(isAppRun) {
+    while (isAppRun) {
         val pressedKey = readAllowedKey()
         if (pressedKey == AllowedKey.Q) {
             isAppRun = false
-        } else {
-            println(pressedKey.name.lowercase())
         }
 
+        when (pressedKey) {
+            AllowedKey.W -> {
+
+            }
+
+            AllowedKey.A -> {
+
+            }
+
+            AllowedKey.S -> {
+
+            }
+
+            AllowedKey.D -> {
+                val newPositionX = posX + 1
+                if (newPositionX <= 9) {
+                    map[posY][posX] = "[ ]"
+                    map[posY][newPositionX] = "[x]"
+                    posX = newPositionX
+                    printMap(map)
+                } else {
+                    println("Map edge reached")
+                }
+            }
+
+            AllowedKey.Q -> {
+
+            }
+
+            AllowedKey.SPACE -> {
+
+            }
+
+            AllowedKey.UNKNOWN -> {
+
+            }
+        }
     }
 }
 
-fun printMap(map: Array<Array<String>>) {
-    for (row in map) {
+private fun printMap(map: List<List<String>>) {
+    map.forEach { row ->
         println(row.joinToString(""))
     }
 }
 
-enum class AllowedKey {
-    W, A, S, D, Q, SPACE, UNKNOWN
-}
-
-fun readAllowedKey(): AllowedKey {
-    print("Press a key (W/A/S/D/SPACE): ")
+private fun readAllowedKey(): AllowedKey {
+    print("Press a key (w/a/s/d/space): ")
     val input = readLine()
 
     return when (input) {
@@ -44,7 +80,7 @@ fun readAllowedKey(): AllowedKey {
         "s" -> AllowedKey.S
         "d" -> AllowedKey.D
         "q" -> AllowedKey.Q
-        " "  -> AllowedKey.SPACE  // handle Enter as space (simplification)
+        " " -> AllowedKey.SPACE  // handle Enter as space (simplification)
         else -> AllowedKey.UNKNOWN
     }
 }
