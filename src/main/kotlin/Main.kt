@@ -6,6 +6,8 @@ enum class AllowedKey {
 }
 
 fun main() {
+    val reset = "\u001B[0m"
+    val red = "\u001B[31m"
     val width = 10
     val height = 10
     val map = MutableList(height) { MutableList(width) { "[ ]" } }
@@ -34,7 +36,7 @@ fun main() {
                     printMap(map)
                     println("Позиція: X = $posY, Y = $posX")
                 } else {
-                    println("Map edge reached")
+                    println("${red}Map edge reached$reset")
                 }
             }
 
@@ -47,7 +49,7 @@ fun main() {
                     printMap(map)
                     println("Позиція: X = $posY, Y = $posX")
                 } else {
-                    println("Map edge reached")
+                    println("${red}Map edge reached$reset")
                 }
 
             }
@@ -61,7 +63,7 @@ fun main() {
                     printMap(map)
                     println("Позиція: X = $posY, Y = $posX")
                 } else {
-                    println("Map edge reached")
+                    println("${red}Map edge reached$reset")
                 }
             }
 
@@ -74,7 +76,7 @@ fun main() {
                     printMap(map)
                     println("Позиція: X = $posY, Y = $posX")
                 } else {
-                    println("Map edge reached")
+                    println("${red}Map edge reached$reset")
                 }
             }
 
