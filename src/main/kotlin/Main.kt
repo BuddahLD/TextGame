@@ -20,6 +20,7 @@ fun main() {
         } else {
             println(pressedKey.name.lowercase())
         }
+
     }
 }
 
