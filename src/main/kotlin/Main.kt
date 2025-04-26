@@ -26,15 +26,43 @@ fun main() {
 
         when (pressedKey) {
             AllowedKey.W -> {
-
+                val newPositionY = posY - 1
+                if (newPositionY >= 0) {
+                    map[posY][posX] = "[ ]"
+                    map[newPositionY][posX] = "[x]"
+                    posY = newPositionY
+                    printMap(map)
+                    println("Позиція: X = $posY, Y = $posX")
+                } else {
+                    println("Map edge reached")
+                }
             }
 
             AllowedKey.A -> {
+                val newPositionX = posX - 1
+                if (newPositionX >= 0) {
+                    map[posY][posX] = "[ ]"
+                    map[posY][newPositionX] = "[x]"
+                    posX = newPositionX
+                    printMap(map)
+                    println("Позиція: X = $posY, Y = $posX")
+                } else {
+                    println("Map edge reached")
+                }
 
             }
 
             AllowedKey.S -> {
-
+                val newPositionY = posY + 1
+                if (newPositionY <= 9) {
+                    map[posY][posX] = "[ ]"
+                    map[newPositionY][posX] = "[x]"
+                    posY = newPositionY
+                    printMap(map)
+                    println("Позиція: X = $posY, Y = $posX")
+                } else {
+                    println("Map edge reached")
+                }
             }
 
             AllowedKey.D -> {
@@ -44,6 +72,7 @@ fun main() {
                     map[posY][newPositionX] = "[x]"
                     posX = newPositionX
                     printMap(map)
+                    println("Позиція: X = $posY, Y = $posX")
                 } else {
                     println("Map edge reached")
                 }
@@ -58,6 +87,7 @@ fun main() {
             }
 
             AllowedKey.UNKNOWN -> {
+
 
 
             }
