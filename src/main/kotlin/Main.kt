@@ -9,6 +9,13 @@ fun main() {
     val width = 10
     val height = 10
     val map = MutableList(height) { MutableList(width) { "[ ]" } }
+    val reset = "\u001B[0m"
+    val red = "\u001B[31m"
+    val yellow = "\u001B[33m"
+    val green = "\u001B[32m"
+    val cyan = "\u001B[36m"
+    val blue = "\u001B[34m"
+    val purple = "\u001B[35m"
 //    println(map)
 
     var posX = 0
@@ -26,8 +33,6 @@ fun main() {
 
         when (pressedKey) {
             AllowedKey.W -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
                 val newPositionY = posY - 1
                 if (newPositionY >= 0) {
                     map[posY][posX] = "[ ]"
@@ -41,8 +46,6 @@ fun main() {
             }
 
             AllowedKey.A -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
                 val newPositionX = posX - 1
                 if (newPositionX >= 0) {
                     map[posY][posX] = "[ ]"
@@ -57,8 +60,6 @@ fun main() {
             }
 
             AllowedKey.S -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
                 val newPositionY = posY + 1
                 if (newPositionY <= 9) {
                     map[posY][posX] = "[ ]"
@@ -72,8 +73,6 @@ fun main() {
             }
 
             AllowedKey.D -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
                 val newPositionX = posX + 1
                 if (newPositionX <= 9) {
                     map[posY][posX] = "[ ]"
@@ -87,13 +86,6 @@ fun main() {
             }
 
             AllowedKey.Q -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val yellow = "\u001B[33m"
-                val green = "\u001B[32m"
-                val cyan = "\u001B[36m"
-                val blue = "\u001B[34m"
-                val purple = "\u001B[35m"
                 println("${red}B${yellow}Y${green}E${cyan}B${blue}Y${purple}E${red}E$reset")
 
             }
@@ -131,3 +123,4 @@ private fun readAllowedKey(): AllowedKey {
         else -> AllowedKey.UNKNOWN
     }
 }
+
