@@ -1,133 +1,99 @@
 package com.danylo.oliinyk
 
+import java.awt.Color
+import java.awt.Font
+import java.awt.Graphics
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import javax.swing.JFrame
+import javax.swing.JPanel
+import kotlin.system.exitProcess
+
 enum class AllowedKey {
     W, A, S, D, Q, SPACE,
     UNKNOWN
 }
 
-fun main() {
-    val width = 10
-    val height = 10
-    val map = MutableList(height) { MutableList(width) { "[ ]" } }
-//    println(map)
-
+class GamePanel : JPanel() {
+    val widthSquares = 10
+    val heightSquares = 10
+    val cellSize = 40
     var posX = 0
     var posY = 0
-
-    map[posY][posX] = "[x]" // map.get(posX).set(posY, "x")
-    printMap(map)
-
-    var isAppRun = true
-    while (isAppRun) {
-        val pressedKey = readAllowedKey()
-        if (pressedKey == AllowedKey.Q) {
-            isAppRun = false
+    var statusMessage = "Position: X = 0, Y = 0"
+    var isEdgeReached = false
+    
+    init {
+        isFocusable = true
+        addKeyListener(
+            object : KeyAdapter() {
+                override fun keyPressed(e: KeyEvent) {
+                    when (e.keyChar) {
+                        'w' -> movePlayer(0, -1)
+                        'a' -> movePlayer(-1, 0)
+                        's' -> movePlayer(0, 1)
+                        'd' -> movePlayer(1, 0)
+                        'q' -> exitProcess(0)
+                    }
+                    repaint()
+                }
+            }
+        )
+    }
+    
+    private fun movePlayer(dx: Int, dy: Int) {
+        val newX = posX + dx
+        val newY = posY + dy
+        
+        if (newX in 0 until widthSquares && newY in 0 until heightSquares) {
+            posX = newX
+            posY = newY
+            statusMessage = "Position: X = $posX, Y = $posY"
+            isEdgeReached = false
+        } else {
+            statusMessage = "Map edge reached"
+            isEdgeReached = true
         }
-
-        when (pressedKey) {
-            AllowedKey.W -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val newPositionY = posY - 1
-                if (newPositionY >= 0) {
-                    map[posY][posX] = "[ ]"
-                    map[newPositionY][posX] = "[x]"
-                    posY = newPositionY
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
-            }
-
-            AllowedKey.A -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val newPositionX = posX - 1
-                if (newPositionX >= 0) {
-                    map[posY][posX] = "[ ]"
-                    map[posY][newPositionX] = "[x]"
-                    posX = newPositionX
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
-
-            }
-
-            AllowedKey.S -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val newPositionY = posY + 1
-                if (newPositionY <= 9) {
-                    map[posY][posX] = "[ ]"
-                    map[newPositionY][posX] = "[x]"
-                    posY = newPositionY
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
-            }
-
-            AllowedKey.D -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val newPositionX = posX + 1
-                if (newPositionX <= 9) {
-                    map[posY][posX] = "[ ]"
-                    map[posY][newPositionX] = "[x]"
-                    posX = newPositionX
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
-            }
-
-            AllowedKey.Q -> {
-                val reset = "\u001B[0m"
-                val red = "\u001B[31m"
-                val yellow = "\u001B[33m"
-                val green = "\u001B[32m"
-                val cyan = "\u001B[36m"
-                val blue = "\u001B[34m"
-                val purple = "\u001B[35m"
-                println("${red}B${yellow}Y${green}E${cyan}B${blue}Y${purple}E${red}E$reset")
-
-            }
-
-            AllowedKey.SPACE -> {
-
-            }
-
-            AllowedKey.UNKNOWN -> {
-
-
-
+    }
+    
+    override fun paintComponent(g: Graphics) {
+        super.paintComponent(g)
+        
+        // Draw grid of blue squares
+        g.color = Color.BLUE
+        for (y in 0 until heightSquares) {
+            for (x in 0 until widthSquares) {
+                g.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2)
             }
         }
+        
+        // Draw red circle at player position
+        g.color = Color.RED
+        g.fillOval(posX * cellSize + 5, posY * cellSize + 5, cellSize - 10, cellSize - 10)
+        
+        // Draw status message
+        g.font = Font("Arial", Font.BOLD, 14)
+        if (isEdgeReached) {
+            g.color = Color.RED
+        } else {
+            g.color = Color.BLACK
+        }
+        g.drawString(statusMessage, 10, heightSquares * cellSize + 30)
     }
 }
 
-private fun printMap(map: List<List<String>>) {
-    map.forEach { row ->
-        println(row.joinToString(""))
-    }
+fun drawSampleUi() {
+    val frame = JFrame("Grid Game")
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+    
+    val gamePanel = GamePanel()
+    frame.contentPane = gamePanel
+    frame.setSize(gamePanel.widthSquares * gamePanel.cellSize + 50, gamePanel.heightSquares * gamePanel.cellSize + 80)
+    frame.isVisible = true
+    
+    gamePanel.requestFocus()
 }
 
-private fun readAllowedKey(): AllowedKey {
-    print("Press a key (w/a/s/d/space): ")
-    val input = readLine()
-
-    return when (input) {
-        "w" -> AllowedKey.W
-        "a" -> AllowedKey.A
-        "s" -> AllowedKey.S
-        "d" -> AllowedKey.D
-        "q" -> AllowedKey.Q
-        " " -> AllowedKey.SPACE  // handle Enter as space (simplification)
-        else -> AllowedKey.UNKNOWN
-    }
+fun main() {
+    drawSampleUi()
 }
