@@ -5,21 +5,24 @@ enum class AllowedKey {
     UNKNOWN
 }
 
-fun main() {
-    val width = 10
-    val height = 10
-    val map = MutableList(height) { MutableList(width) { "[ ]" } }
-    val reset = "\u001B[0m"
-    val red = "\u001B[31m"
-    val yellow = "\u001B[33m"
-    val green = "\u001B[32m"
-    val cyan = "\u001B[36m"
-    val blue = "\u001B[34m"
-    val purple = "\u001B[35m"
-//    println(map)
+object Colors {
+    val RESET = "\u001B[0m"
+    val RED = "\u001B[31m"
+    val YELLOW = "\u001B[33m"
+    val GREEN = "\u001B[32m"
+    val CYAN = "\u001B[36m"
+    val BLUE = "\u001B[34m"
+    val PURPLE = "\u001B[35m"
+}
 
-    var posX = 0
-    var posY = 0
+var posX = 0
+var posY = 0
+val width = 10
+val height = 10
+val map = MutableList(height) { MutableList(width) { "[ ]" } }
+
+fun main() {
+
 
     map[posY][posX] = "[x]" // map.get(posX).set(posY, "x")
     printMap(map)
@@ -33,60 +36,27 @@ fun main() {
 
         when (pressedKey) {
             AllowedKey.W -> {
-                val newPositionY = posY - 1
-                if (newPositionY >= 0) {
-                    map[posY][posX] = "[ ]"
-                    map[newPositionY][posX] = "[x]"
-                    posY = newPositionY
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
+                moveCharacter(dx = 0, dy = -1)
+                printMap(map)
             }
 
             AllowedKey.A -> {
-                val newPositionX = posX - 1
-                if (newPositionX >= 0) {
-                    map[posY][posX] = "[ ]"
-                    map[posY][newPositionX] = "[x]"
-                    posX = newPositionX
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
-
+                moveCharacter(dx = -1, dy = 0)
+                printMap(map)
             }
 
             AllowedKey.S -> {
-                val newPositionY = posY + 1
-                if (newPositionY <= 9) {
-                    map[posY][posX] = "[ ]"
-                    map[newPositionY][posX] = "[x]"
-                    posY = newPositionY
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
+                moveCharacter(dx = 0, dy = 1)
+                printMap(map)
             }
 
             AllowedKey.D -> {
-                val newPositionX = posX + 1
-                if (newPositionX <= 9) {
-                    map[posY][posX] = "[ ]"
-                    map[posY][newPositionX] = "[x]"
-                    posX = newPositionX
-                    printMap(map)
-                    println("Позиція: X = $posY, Y = $posX")
-                } else {
-                    println("${red}Map edge reached$reset")
-                }
+                moveCharacter(dx = 1, dy = 0)
+                printMap(map)
             }
 
             AllowedKey.Q -> {
-                println("${red}B${yellow}Y${green}E${cyan}B${blue}Y${purple}E${red}E$reset")
+                println("${Colors.RED}B${Colors.YELLOW}Y${Colors.GREEN}E${Colors.CYAN}B${Colors.BLUE}Y${Colors.PURPLE}E${Colors.RED}E${Colors.RESET}")
 
             }
 
@@ -95,7 +65,6 @@ fun main() {
             }
 
             AllowedKey.UNKNOWN -> {
-
 
 
             }
@@ -124,3 +93,14 @@ private fun readAllowedKey(): AllowedKey {
     }
 }
 
+fun moveCharacter(dx: Int, dy: Int) {
+    val currentPositionX = posX
+    val currentPositionY = posY
+    val newPositionX = currentPositionX + dx
+    val newPositionY = currentPositionY + dy
+    println("Позиція: X = $newPositionX, Y = $newPositionY")
+    map[currentPositionY][currentPositionX] = "[ ]"
+    map[newPositionY][newPositionX] = "[x]"
+    posX = newPositionX
+    posY = newPositionY
+}
