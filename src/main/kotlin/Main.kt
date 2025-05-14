@@ -98,9 +98,14 @@ fun moveCharacter(dx: Int, dy: Int) {
     val currentPositionY = posY
     val newPositionX = currentPositionX + dx
     val newPositionY = currentPositionY + dy
-    println("Позиція: X = $newPositionX, Y = $newPositionY")
-    map[currentPositionY][currentPositionX] = "[ ]"
-    map[newPositionY][newPositionX] = "[x]"
-    posX = newPositionX
-    posY = newPositionY
+
+    if ((newPositionX in 0 until width) and (newPositionY in 0 until height)) {
+        map[currentPositionY][currentPositionX] = "[ ]"
+        map[newPositionY][newPositionX] = "[x]"
+        posX = newPositionX
+        posY = newPositionY
+        println("Позиція: X = $newPositionX, Y = $newPositionY")
+    } else {
+        println("${Colors.RED}Ти не можеш туди потрапити${Colors.RESET}")
+    }
 }
